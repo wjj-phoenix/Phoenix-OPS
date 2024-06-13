@@ -3,6 +3,7 @@ package com.phoenix.devops.common;
 import java.util.List;
 import java.util.Map;
 
+import com.mybatisflex.core.BaseMapper;
 import com.mybatisflex.core.paginate.Page;
 import com.mybatisflex.core.query.QueryColumn;
 import com.mybatisflex.core.query.QueryWrapper;
@@ -14,6 +15,16 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class SelectCommon<T> {
+    public Page<T> findAll(BaseMapper<T> mapper, Integer page, Integer limit, String condition, QueryWrapper wrapper) {
+        if (StrUtil.isNotBlank(condition)) {
+            Map<String, Object> map = ParamUtil.split(condition);
+            for (Map.Entry<String, Object> entry : map.entrySet()) {
+                wrapper.and(new QueryColumn(entry.getKey()).like(entry.getValue()));
+            }
+            log.info("构造的查询条件: {}", wrapper);
+        }
+        return mapper.paginateWithRelations(new Page<>(page, limit), wrapper(condition));
+    }
     /**
      * 分页查询所有信息
      *

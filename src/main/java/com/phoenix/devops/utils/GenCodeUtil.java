@@ -1,6 +1,7 @@
 package com.phoenix.devops.utils;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import com.mybatisflex.codegen.Generator;
 import com.mybatisflex.codegen.config.GlobalConfig;
@@ -35,7 +36,7 @@ public class GenCodeUtil {
         // 设置根包
         globalConfig.setBasePackage("com.phoenix.devops");
         globalConfig.setAuthor("wjj-phoenix");
-        globalConfig.setSince(LocalDate.now().toString());
+        globalConfig.setSince(LocalDateTime.now().toString());
 
         // 设置生成 entity 并启用 Lombok
         globalConfig.setEntityGenerateEnable(true);
@@ -44,6 +45,7 @@ public class GenCodeUtil {
         globalConfig.setEntityWithLombok(true);
         // 设置项目的JDK版本，项目的JDK为14及以上时建议设置该项，小于14则可以不设置
         globalConfig.setEntityJdkVersion(21);
+        globalConfig.getEntityConfig().setOverwriteEnable(true);
 
         // 设置生成 mapper
         globalConfig.setMapperGenerateEnable(true);

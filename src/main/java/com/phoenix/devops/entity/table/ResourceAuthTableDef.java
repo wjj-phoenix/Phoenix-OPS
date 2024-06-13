@@ -9,9 +9,9 @@ import java.io.Serial;
  * 主机账号 表定义层。
  *
  * @author wjj-phoenix
- * @since 2024-05-14
+ * @since 2024-06-13T20:35:20.646330300
  */
-public class HostUserTableDef extends TableDef {
+public class ResourceAuthTableDef extends TableDef {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -19,7 +19,7 @@ public class HostUserTableDef extends TableDef {
     /**
      * 主机账号
      */
-    public static final HostUserTableDef HOST_USER = new HostUserTableDef();
+    public static final ResourceAuthTableDef RESOURCE_AUTH = new ResourceAuthTableDef();
 
     /**
      * 主键ID
@@ -39,7 +39,7 @@ public class HostUserTableDef extends TableDef {
     /**
      * 用户名
      */
-    public final QueryColumn ACCOUNT = new QueryColumn(this, "account");
+    public final QueryColumn USERNAME = new QueryColumn(this, "username");
 
     /**
      * 密码
@@ -59,7 +59,11 @@ public class HostUserTableDef extends TableDef {
     /**
      * 创建时间
      */
-    public final QueryColumn CREATE_TIME = new QueryColumn(this, "create_time");
+    public final QueryColumn CREATED_TIME = new QueryColumn(this, "created_time");
+    /**
+     * 创建用户
+     */
+    public final QueryColumn CREATED_USER = new QueryColumn(this, "created_user");
 
     /**
      * 是否为特权账号
@@ -84,19 +88,19 @@ public class HostUserTableDef extends TableDef {
     /**
      * 默认字段，不包含逻辑删除或者 large 等字段。
      */
-    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, NAME, ACCOUNT, PASSWORD, IS_PRIVILEGED, IS_ENABLED, MACHINE_ID, REMARK, LATEST_CONN_TIME, EFFECTIVE_END_TIME, CREATE_TIME};
+    public final QueryColumn[] DEFAULT_COLUMNS = new QueryColumn[]{ID, NAME, USERNAME, PASSWORD, IS_PRIVILEGED, IS_ENABLED, MACHINE_ID, REMARK, LATEST_CONN_TIME, EFFECTIVE_END_TIME, CREATED_TIME, CREATED_USER};
 
-    public HostUserTableDef() {
-        super("", "host_user");
+    public ResourceAuthTableDef() {
+        super("", "resource_auth");
     }
 
-    private HostUserTableDef(String schema, String name, String alisa) {
+    private ResourceAuthTableDef(String schema, String name, String alisa) {
         super(schema, name, alisa);
     }
 
-    public HostUserTableDef as(String alias) {
+    public ResourceAuthTableDef as(String alias) {
         String key = getNameWithSchema() + "." + alias;
-        return getCache(key, k -> new HostUserTableDef("", "host_user", alias));
+        return getCache(key, k -> new ResourceAuthTableDef("", "resource_auth", alias));
     }
 
 }

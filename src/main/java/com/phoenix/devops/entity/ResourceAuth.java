@@ -1,28 +1,30 @@
 package com.phoenix.devops.entity;
 
-import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Id;
 import com.mybatisflex.annotation.KeyType;
+import com.mybatisflex.annotation.Table;
+import java.io.Serializable;
+import java.math.BigInteger;
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
 import java.io.Serial;
-import java.io.Serializable;
-import java.time.LocalDateTime;
 
 /**
  * 主机账号 实体类。
  *
  * @author wjj-phoenix
- * @since 2024-05-14
+ * @since 2024-06-13T20:35:20.646330300
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class HostUser implements Serializable {
+@Table("resource_auth")
+public class ResourceAuth implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 1L;
@@ -41,7 +43,7 @@ public class HostUser implements Serializable {
     /**
      * 用户名
      */
-    private String account;
+    private String username;
 
     /**
      * 密码
@@ -61,7 +63,7 @@ public class HostUser implements Serializable {
     /**
      * 所属机器ID
      */
-    private Long machineId;
+    private BigInteger machineId;
 
     /**
      * 备注信息
@@ -81,7 +83,11 @@ public class HostUser implements Serializable {
     /**
      * 创建时间
      */
-    @Column(onInsertValue = "now()")
-    private LocalDateTime createTime;
+    private LocalDateTime createdTime;
+
+    /**
+     * 创建用户
+     */
+    private LocalDateTime createdUser;
 
 }
