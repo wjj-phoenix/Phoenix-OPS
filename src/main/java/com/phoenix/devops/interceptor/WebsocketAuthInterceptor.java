@@ -45,6 +45,4 @@ public class WebsocketAuthInterceptor implements HandshakeInterceptor {
         // 示例代码，实际应用中应替换为真实验证逻辑
         return true;
     }
-
-
 }

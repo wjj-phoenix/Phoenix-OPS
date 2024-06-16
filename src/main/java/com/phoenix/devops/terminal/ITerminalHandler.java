@@ -4,7 +4,6 @@ import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.Session;
 import com.phoenix.devops.exception.BizAssert;
 import com.phoenix.devops.exception.terminal.TerminalException;
-import com.phoenix.devops.terminal.impl.TerminalHandlerImpl;
 import com.phoenix.devops.utils.IOUtil;
 import com.phoenix.devops.utils.terminal.TerminalUtil;
 
@@ -15,14 +14,6 @@ import java.util.function.Function;
  * @since 2024-06-16
  */
 public interface ITerminalHandler {
-    /**
-     * 获取top信息
-     *
-     * @param machineId 机器id
-     * @param username  主机用户名
-     */
-    TerminalHandlerImpl.TopInfo getTopInfo(Long machineId, String username);
-
     /**
      * 执行shell目录下的shell脚本
      *

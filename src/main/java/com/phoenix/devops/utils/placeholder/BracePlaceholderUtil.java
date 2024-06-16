@@ -1,5 +1,7 @@
 package com.phoenix.devops.utils.placeholder;
 
+import lombok.extern.log4j.Log4j2;
+
 import java.util.Map;
 import java.util.function.Function;
 
@@ -8,6 +10,7 @@ import java.util.function.Function;
  * @since 2024-06-16
  * {}占位符解析工具
  */
+@Log4j2
 public class BracePlaceholderUtil {
     /**
      * 花括号占位符解析器
@@ -35,7 +38,7 @@ public class BracePlaceholderUtil {
         int endIndex = temp.indexOf("}") + 1;
 
         String next = temp.substring(endIndex).trim();
-        int nextContain= next.indexOf("{");
+        int nextContain = next.indexOf("{");
         String nexIndexValue = next;
         if (nextContain != -1) {
             nexIndexValue = next.substring(0, nextContain);
@@ -48,11 +51,12 @@ public class BracePlaceholderUtil {
         } else {
             valueLastIndex = content.indexOf(nexIndexValue);
         }
+        log.info("content:{}", content);
         String value = content.substring(index, valueLastIndex).trim();
         res.put(key, value);
 
         if (nextContain != -1) {
-            reverTemplate(next, content.substring(content.indexOf(value)  + value.length()).trim(), res);
+            reverTemplate(next, content.substring(content.indexOf(value) + value.length()).trim(), res);
         }
     }
 }

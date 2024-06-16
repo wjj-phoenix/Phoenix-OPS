@@ -69,7 +69,6 @@ public class WebTerminalHandler {
             // 断开连接后关闭会话
             channel.disconnect();
         }
-
     }
 
     /**

@@ -12,23 +12,14 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-import java.io.IOException;
-import java.util.Collection;
-import java.util.concurrent.ConcurrentHashMap;
-
 /**
  * @author wjj-phoenix
  * @since 2024-05-14
  */
 @Log4j2
 @Component
-public class IWebSocketHandler extends TextWebSocketHandler {
+public class IWebTerminalHandler extends TextWebSocketHandler {
     private WebTerminalHandler terminalHandler;
-
-    /**
-     * 保存连接的会话
-     */
-    private final ConcurrentHashMap<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) {
@@ -70,22 +61,5 @@ public class IWebSocketHandler extends TextWebSocketHandler {
     public void afterConnectionClosed(WebSocketSession session, @NonNull CloseStatus status) {
         log.info("连接被关闭，会话ID：{}，客户端地址：{}", session.getId(), session.getRemoteAddress());
         terminalHandler.close(session);
-    }
-
-    /**
-     * 向客户端推送消息
-     *
-     * @param msg 文本消息
-     */
-    public void pushMsg(String msg) {
-        final Collection<WebSocketSession> webSocketSessions = sessions.values();
-        final TextMessage textMessage = new TextMessage(msg);
-        webSocketSessions.forEach(s -> {
-            try {
-                s.sendMessage(textMessage);
-            } catch (IOException e) {
-                e.printStackTrace(System.err);
-            }
-        });
     }
 }
