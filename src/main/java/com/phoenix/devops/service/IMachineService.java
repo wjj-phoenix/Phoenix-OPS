@@ -57,4 +57,12 @@ public interface IMachineService extends IService<Machine> {
      * @param ids 主机ID集合
      */
     Boolean delMachine(Set<Long> ids);
+
+    /**
+     * 根据主机ID和主机用户名查询主机详细信息
+     * @param machineId 主机ID
+     * @param username 主机用户名
+     * @return 详细信息
+     */
+    Machine fetchMachineAndResourceAuthByIdAndUsername(Long machineId, String username);
 }

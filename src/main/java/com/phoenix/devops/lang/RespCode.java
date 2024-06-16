@@ -14,6 +14,10 @@ public enum RespCode {
      */
     BAD_REQUEST(400, "请求失败"),
     /**
+     * 参数错误，请求失败
+     */
+    PARAM_ERROR(400, "参数错误"),
+    /**
      * 认证失败/登录失效
      */
     UNAUTHORIZED(401, "认证失败/登录失效"),

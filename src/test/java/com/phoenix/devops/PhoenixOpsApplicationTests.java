@@ -1,6 +1,8 @@
 package com.phoenix.devops;
 
-class PhoenixOpsApplicationTests {
+
+
+public class PhoenixOpsApplicationTests {
 
 
 }

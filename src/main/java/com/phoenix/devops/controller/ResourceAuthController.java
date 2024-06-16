@@ -1,20 +1,12 @@
 package com.phoenix.devops.controller;
 
-import com.mybatisflex.core.paginate.Page;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.phoenix.devops.entity.ResourceAuth;
 import com.phoenix.devops.lang.IPage;
 import com.phoenix.devops.model.vo.ResourceAuthVO;
 import com.phoenix.devops.service.IResourceAuthService;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Set;
 
@@ -61,7 +53,7 @@ public class ResourceAuthController {
      */
     @PutMapping("/{id}")
     public boolean update(@PathVariable Long id, @RequestBody ResourceAuthVO hostUser) {
-        return service.updateHostUserById(id, hostUser);
+        return service.updateResourceAuthById(id, hostUser);
     }
 
     /**

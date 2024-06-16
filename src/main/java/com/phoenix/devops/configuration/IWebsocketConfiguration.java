@@ -18,7 +18,7 @@ public class IWebsocketConfiguration implements WebSocketConfigurer {
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         // 注册WebSocket处理器和对应的URL路径
-        registry.addHandler(myWebSocketHandler(), "/ws").setAllowedOrigins("*")
+        registry.addHandler(myWebSocketHandler(), "/machines/terminal").setAllowedOrigins("*")
                 // 配置WebSocketHandler和拦截器：在WebSocket配置类中，通过WebSocketConfigurer接口注册WebSocket处理程序，并添加你的握手拦截器。
                 .addInterceptors(new WebsocketAuthInterceptor());
     }

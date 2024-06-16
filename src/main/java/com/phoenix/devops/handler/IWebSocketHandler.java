@@ -1,5 +1,10 @@
 package com.phoenix.devops.handler;
 
+import com.phoenix.devops.pool.GlobalThreadPool;
+import com.phoenix.devops.terminal.WebTerminalHandler;
+import com.phoenix.devops.utils.SpringUtil;
+import com.phoenix.devops.utils.WebSocketUtil;
+import lombok.NonNull;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -18,35 +23,53 @@ import java.util.concurrent.ConcurrentHashMap;
 @Log4j2
 @Component
 public class IWebSocketHandler extends TextWebSocketHandler {
+    private WebTerminalHandler terminalHandler;
+
     /**
      * 保存连接的会话
      */
     private final ConcurrentHashMap<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
 
     @Override
-    public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+    public void afterConnectionEstablished(WebSocketSession session) {
         log.info("连接已建立，会话ID：{}，客户端地址：{}", session.getId(), session.getRemoteAddress());
-        sessions.put(session.getId(), session);
+        if (this.terminalHandler == null) {
+            this.terminalHandler = SpringUtil.getBean(WebTerminalHandler.class);
+        }
+        Long machineId = (Long) session.getAttributes().get("machineId");
+        String username = (String) session.getAttributes().get("username");
+
+        GlobalThreadPool.execute(() -> {
+            try {
+                // 连接终端服务器
+                terminalHandler.connectShell(machineId, username, session);
+            } catch (Exception e) {
+                WebSocketUtil.sendText(session, String.format("连接失败：%s", e.getMessage()));
+                terminalHandler.close(session);
+            }
+        });
     }
 
     @Override
-    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+    protected void handleTextMessage(@NonNull WebSocketSession session, TextMessage message) {
         log.info("接受到消息：{}", message.getPayload());
+        String payload = message.getPayload();
+        terminalHandler.recvMsg(payload, session);
     }
 
     @Override
-    public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
-        log.info("消息传输出错！");
-        exception.printStackTrace();
+    public void handleTransportError(@NonNull WebSocketSession session, Throwable exception) {
+        log.error("发生错误, Session ID： {}", session.getId());
+        exception.printStackTrace(System.err);
     }
 
     /**
      * 连接关闭移除会话
      */
     @Override
-    public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
+    public void afterConnectionClosed(WebSocketSession session, @NonNull CloseStatus status) {
         log.info("连接被关闭，会话ID：{}，客户端地址：{}", session.getId(), session.getRemoteAddress());
-        sessions.remove(session.getId());
+        terminalHandler.close(session);
     }
 
     /**
@@ -61,7 +84,7 @@ public class IWebSocketHandler extends TextWebSocketHandler {
             try {
                 s.sendMessage(textMessage);
             } catch (IOException e) {
-                e.printStackTrace();
+                e.printStackTrace(System.err);
             }
         });
     }

@@ -44,8 +44,7 @@ public class MachineServiceImpl extends ServiceImpl<MachineMapper, Machine> impl
 
     @Override
     public List<Machine> fetchAllMachines() {
-        return mapper.selectListWithRelationsByQuery(
-                QueryWrapper.create().select(MACHINE.ALL_COLUMNS, RESOURCE_AUTH.ALL_COLUMNS).from(MACHINE).leftJoin(RESOURCE_AUTH).on(RESOURCE_AUTH.MACHINE_ID.eq(MACHINE.ID)));
+        return mapper.selectListWithRelationsByQuery(QueryWrapper.create().select(MACHINE.ALL_COLUMNS, RESOURCE_AUTH.ALL_COLUMNS).from(MACHINE).leftJoin(RESOURCE_AUTH).on(RESOURCE_AUTH.MACHINE_ID.eq(MACHINE.ID)));
     }
 
     @Override
@@ -88,6 +87,11 @@ public class MachineServiceImpl extends ServiceImpl<MachineMapper, Machine> impl
             throw new IllegalArgumentException("删除主机信息失败");
         }
         return true;
+    }
+
+    @Override
+    public Machine fetchMachineAndResourceAuthByIdAndUsername(Long machineId, String username) {
+        return mapper.selectOneWithRelationsByQuery(QueryWrapper.create().select(MACHINE.ALL_COLUMNS, RESOURCE_AUTH.ALL_COLUMNS).from(MACHINE).leftJoin(RESOURCE_AUTH).on(RESOURCE_AUTH.MACHINE_ID.eq(MACHINE.ID)).where(MACHINE.ID.eq(machineId)).and(RESOURCE_AUTH.USERNAME.eq(username)));
     }
 
 }
